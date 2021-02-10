@@ -14,6 +14,18 @@ module.exports = function(app, db) {
     });
   });
 
+  app.delete('notes/:id', (req, res) => {
+    const id = req.params.id;
+    const details = { '_id': new ObjectID(id) };
+    db.db().collection('notes').remove(details, (err, item) => {
+      if(err) {
+        res.send({ 'error': 'An error has occured' });
+      } else {
+          res.send(`Note ${id} deleted`);
+      };
+    });
+  });
+
   app.post('/notes', (req, res) => {
     const note = { text: req.body.body, title: req.body.title }
     db.db().collection('notes').insert(note, (err, result) => {
